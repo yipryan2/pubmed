@@ -2,7 +2,7 @@
 
 import eutils
 
-out_filename = 'efetch_abstracts.json'
+out_filename = 'abstracts.json'
 number_of_abstract = 493709
 querykey = '1'
 webenv = 'MCID_608d9d1a11e72567cd2f1f7a'
