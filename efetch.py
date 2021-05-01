@@ -11,13 +11,13 @@ print("Number of abstract: {:,} downloading with {} and {}"
 
 # number_of_abstract = 10
 # number_of_abstract = 20
-number_of_abstract = 60
+# number_of_abstract = 60
 # number_of_abstract = 1000
 
-# retmax = 10000
+retmax = 10000
 # retmax = 5000
 # retmax = 1000
-retmax = 20
+# retmax = 20
 # retmax = 10
 
 with open(out_filename, 'w') as json_out_file:
