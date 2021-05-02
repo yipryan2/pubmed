@@ -10,16 +10,19 @@ import time
 
 def test_esearch():
     # Query one article.
+    time.sleep(1)
     result = eutils.esearch('27870832[pmid]')
     assert result[1] ==  1               # Number of hits.
     assert result[2] == '1'              # Query key.
     assert result[3].startswith('MCID_') # Web env.
     # Query two articles.
+    time.sleep(1)
     result = eutils.esearch('27870832[pmid] or 28420691[pmid]')
     assert result[1] ==  2               # Number of hits.
     assert result[2] == '1'              # Query key.
     assert result[3].startswith('MCID_') # Web env.
     # Keyword-based query.
+    time.sleep(1)
     result = eutils.esearch('HIV')
     assert result[1] >  99               # Number of hits.
     assert result[2] == '1'              # Query key.
@@ -29,13 +32,16 @@ def test_esearch():
 def test_esearch_error():
     # Test that a query to the wrong URL raises an error 404.
     with pytest.raises(requests.exceptions.HTTPError) as ex:
+        time.sleep(1)
         _ = eutils.esearch('HIV', 'https://www.google.com/wrong')
         assert ex.response.status_code == 404
 
 
 def test_efetch():
+    time.sleep(1)
     _, _, querykey, webenv = eutils.esearch('HIV')
     with tempfile.TemporaryFile('w+') as tmpf:
+        time.sleep(1)
         result = eutils.efetch(20, querykey, webenv, retmax=10, outfile=tmpf)
         tmpf.seek(0) # Rewind.
         abstracts_dict = json.load(tmpf)
@@ -47,6 +53,7 @@ def test_efetch():
 def test_efetch_error():
     # Test that a query to the wrong URL raises an error 404.
     with pytest.raises(requests.exceptions.HTTPError) as ex:
+        time.sleep(1)
         _ = eutils.efetch(10, '1', 'MCID_608d46e325a8b65cf511b0e5',
                  url='https://www.google.com/wrong')
         assert ex.response.status_code == 404
