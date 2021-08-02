@@ -1,39 +1,48 @@
 #!/usr/bin/env python3
 
-import argparse
-import csv
+"""
+Invoke as shown below:
+python refseq.py Homo_sapiens.gene_info.gz > Homo_sapiens.gene_info.json
+"""
+
 import gzip
 import json
-from pathlib import Path
+import os
+import sys
 
-parser = argparse.ArgumentParser()
+from datetime import datetime
 
-parser.add_argument("gzfile", help="gziped csv input file")
-parser.add_argument("-o", "--output", help="write json output to file")
- 
-args = parser.parse_args()
- 
-if not args.output:
-    args.output = Path(args.gzfile).stem + '.json'
+def format_date(string):
+    "Transform 20210611 into 2021-06-11."
+    return datetime.strptime(string, "%Y%m%d").strftime("%Y-%m-%d")
 
-print("Writing json output to %s" % args.output)
+def external_identifiers(string):
+    "Extract identifiers from string and return a dict."
+    # MIM:138670|HGNC:HGNC:5|Ensembl:ENSG00000121410
+    IDs = dict()
+    for entry in string.split("|"):
+        if entry.startswith("MIM:"): IDs["OMIM_ID"] = int(entry[4:])
+        if entry.startswith("Ensembl:"): IDs["Ensembl_ID"] = entry[8:]
+        if entry.startswith("FlyBase:"): IDs["FlyBase_ID"] = entry[8:]
+    return IDs
 
-cols_map = { 'GeneID' : 'NCBI gene ID',
-             'Symbol' : 'Symbol',
-             'Full_name_from_nomenclature_authority' : 'Full name',
-             'Synonyms' : 'Synonyms',
-             'Organism' : 'Organism',
-             'Modification_date' : 'Updated' }
 
-json_data = []
-
-with gzip.open(args.gzfile, mode='rt') as csv_file:
-    csv_reader = csv.DictReader(csv_file, delimiter='\t')
-    for row in csv_reader:
-        row['GeneID'] = int(row['GeneID'])
-        json_data.append({v:row[k] if k != 'Organism' else 0 for k,v in cols_map.items()})
-
-print("No. of RefSeq IDs: %d" % len(json_data))
-
-with open(args.output, 'w') as json_out_file:
-    json.dump(json_data, json_out_file, indent=4, sort_keys=False)
+if __name__ == "__main__":
+    json_data = list()
+    with gzip.open(sys.argv[1]) as f:
+        next(f) # Skip 1-line header.
+        for line in f:
+            line = line.decode('ascii') # Required for zipped files.
+            items = line.split('\t')
+            entry = {
+                "tax_id": int(items[0]),
+                "NCBI_gene_ID": int(items[1]),
+                "symbol": items[2],
+                "syonyms": [] if items[4] == "-" else items[4].split("|"),
+                "full_name": items[8], 
+                "updated": format_date(items[14])
+            }
+            entry.update(external_identifiers(items[5]))
+            json_data.append(entry)
+    # Output to stdout.        
+    json.dump(json_data, sys.stdout, indent=4)
