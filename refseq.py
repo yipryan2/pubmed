@@ -23,7 +23,7 @@ def external_identifiers(string):
     for entry in string.split("|"):
         if entry.startswith("MIM:"): IDs["OMIM_ID"] = int(entry[4:])
         if entry.startswith("Ensembl:"): IDs["Ensembl_ID"] = entry[8:]
-        if entry.startswith("FlyBase:"): IDs["FlyBase_ID"] = entry[8:]
+        if entry.startswith("FLYBASE:"): IDs["FlyBase_ID"] = entry[8:]
     return IDs
 
 

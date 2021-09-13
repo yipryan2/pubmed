@@ -1,12 +1,12 @@
-name: PubMed-Eutils-CI
+name: PubMed-CI
 
 on:
   pull_request:
   push:
 
 jobs:
-  pubmed-eutils-ci:
-    name: PubMed Eutils
+  pubmed-ci:
+    name: PubMed 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
