@@ -6,7 +6,16 @@ Extract abstracts from PubMed
 
 ## Using Docker to run this script
 
+To build
+
+```shell
 git clone <https://github.com/yipryan2/pubmed.git>
 cd pubmed
 docker build -t pubmed:0.1 .
+```
+
+To run
+
+```shell
 docker run --rm -it pubmed:0.1
+```
