@@ -9,7 +9,7 @@ Extract abstracts from PubMed
 To build
 
 ```shell
-git clone <https://github.com/yipryan2/pubmed.git>
+git clone https://github.com/yipryan2/pubmed.git
 cd pubmed
 docker build -t pubmed:0.1 .
 ```
