@@ -2,7 +2,7 @@
 
 """
 Invoke as shown below:
-python refseq.py Homo_sapiens.gene_info.gz > Homo_sapiens.gene_info.json
+python3 refseq.py Homo_sapiens.gene_info.gz > Homo_sapiens.gene_info.json
 """
 
 import gzip
