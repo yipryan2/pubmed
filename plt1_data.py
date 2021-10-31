@@ -41,7 +41,7 @@ relationships_dict[('7955','7955')] = 15
 relationships_dict[('7227','7227')] = 16
 
 def generate_relationships(data):
-    result = {} 
+    result = {}
     for groupid, genes in data.items():
         if len(genes) > 1:
             l = []
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     with open(sys.argv[1]) as f:
         for line in f:
             groupid, species, gene, _, _, _ = line.split("\t")
-            if species in keep: 
+            if species in keep:
                 homologs[groupid].add( (species, gene) )
 
     results = list(chain.from_iterable(generate_relationships(homologs).values()))
